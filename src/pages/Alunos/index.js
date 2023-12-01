@@ -6,11 +6,12 @@ import {
   FaEdit,
   FaWindowClose,
   FaExclamation,
+  FaPlus,
 } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 import { Container } from '../../styles/GlobalStyles';
-import { AlunoContainer, ProfilePicture } from './styled';
+import { AlunoContainer, ProfilePicture, NovoAluno } from './styled';
 import Loading from '../../components/Loading';
 import axios from '../../services/axios';
 
@@ -63,6 +64,11 @@ export default function Alunos() {
       <Loading isLoading={isLoading} />
 
       <h1>Alunos</h1>
+
+      <NovoAluno to="/aluno/">
+        <FaPlus size={14} />
+        <p>Novo Aluno</p>
+      </NovoAluno>
 
       <AlunoContainer>
         {alunos.map((aluno, index) => (
