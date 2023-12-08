@@ -6,6 +6,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Container } from '../../styles/GlobalStyles';
 import { Form } from './styled';
 import Loading from '../../components/Loading';
+import history from '../../services/history';
+import axios from '../../services/axios';
 import * as actions from '../../store/modules/auth/actions';
 
 export default function Register() {
@@ -15,6 +17,7 @@ export default function Register() {
   const nomeStored = useSelector((state) => state.auth.user.nome);
   const emailStored = useSelector((state) => state.auth.user.email);
   const isLoading = useSelector((state) => state.auth.isLoading);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
@@ -50,6 +53,18 @@ export default function Register() {
 
     dispatch(actions.registerRequest({ nome, email, password, id }));
   }
+
+  const handleDelete = async (e) => {
+    e.persist();
+    try {
+      await axios.delete(`/users/`);
+      dispatch(actions.loginFailure());
+      history.push('/');
+      toast.success('Usuário deletado com sucesso.');
+    } catch (err) {
+      toast.error(err);
+    }
+  };
 
   return (
     <Container>
@@ -93,6 +108,12 @@ export default function Register() {
         </label>
 
         <button type="submit">{id ? 'Salvar' : 'Criar minha conta'}</button>
+
+        {isLoggedIn && (
+          <button type="submit" onClick={handleDelete}>
+            Deletar
+          </button>
+        )}
       </Form>
     </Container>
   );
